@@ -7,8 +7,18 @@ BIO_URL   = "https://bnierimi.vercel.app"
 # Set the page title
 st.set_page_config(page_title="Joint Christmas Carol | DPMaker", page_icon=Image.open("dpmaker.png"))
 
-# Title
 
+
+def image_side_text(ist_holder, image_url="dpmaker.png", image_width=44, markdown="<h1 style=\"margin-top: -0.5rem;\">DPMaker</h1>", columns=[4, 20]):
+    ist_var = ist_holder.container()
+    col1, col2 = ist_holder.columns(columns)
+    with ist_var:
+        with col1:
+            st.image(image_url, width=image_width)
+        with col2:
+            st.markdown(markdown, unsafe_allow_html=True)
+
+# Title
 
 st.image("will-be-at-carol-banner.png", use_column_width=True)
 st.title("✨ Joint Christmas Carol'24")
@@ -19,15 +29,6 @@ st.markdown("""
 - Time: **5PM**
 - Venue: **University Of Ilorin, PS Auditorium**
 """)
-
-def image_side_text(ist_holder, image_url="dpmaker.png", image_width=44, markdown="<h1 style=\"margin-top: -0.5rem;\">DPMaker</h1>", columns=[4, 20]):
-    ist_var = ist_holder.container()
-    col1, col2 = ist_holder.columns(columns)
-    with ist_var:
-        with col1:
-            st.image(image_url, width=image_width)
-        with col2:
-            st.markdown(markdown, unsafe_allow_html=True)
 
 # side bar
 sidebar = st.sidebar
@@ -52,7 +53,7 @@ with st.container(border=True):
         return (ar_width, ar_height)
 
     if base_image and design_image and user_name:
-        st.divider()
+        # st.divider()
         # Open the images
         base_img = Image.open(base_image)
         # base_img.save(f"{base_image}.png", format="PNG")
@@ -109,31 +110,31 @@ with st.container(border=True):
             combined_image.save("combined_image.png")
             st.success("Image saved as combined_image.png")
 
-# st.image("dpmaker-logo-0.png", width=20)
 st.markdown("#")
 
-image_side_text(st, image_url="tcitrogg-logo-purple.svg", image_width=25, markdown=f"[Made by **{ARCHITECT}**]({BIO_URL})", columns=[2.5, 65])
+image_side_text(st)
+st.markdown("####")
+image_side_text(st, image_url="tcitrogg-logo-purple.svg", image_width=25, markdown=f"[yours **{ARCHITECT}**]({BIO_URL})", columns=[2.5, 65])
 
 
-image_side_text(sidebar)
-sidebar.write("""""" )
-sidebar.write("""""" )
-sidebar.write("""""" )
-sidebar.write("""""" )
-sidebar.write("""""" )
-sidebar.write("""""" )
-sidebar.write("""""" )
-sidebar.write("""""" )
-sidebar.write("""""" )
-sidebar.write("""""" )
-sidebar.write("""""" )
-sidebar.write("""""" )
-sidebar.write("""""" )
-sidebar.write("""""" )
-sidebar.write("""""" )
-sidebar.write("""""" )
-sidebar.write("""""" )
-sidebar.write("""""" )
-sidebar.divider()
+# sidebar.write("""""" )
+# sidebar.write("""""" )
+# sidebar.write("""""" )
+# sidebar.write("""""" )
+# sidebar.write("""""" )
+# sidebar.write("""""" )
+# sidebar.write("""""" )
+# sidebar.write("""""" )
+# sidebar.write("""""" )
+# sidebar.write("""""" )
+# sidebar.write("""""" )
+# sidebar.write("""""" )
+# sidebar.write("""""" )
+# sidebar.write("""""" )
+# sidebar.write("""""" )
+# sidebar.write("""""" )
+# sidebar.write("""""" )
+# sidebar.write("""""" )
+# sidebar.divider()
 
-image_side_text(sidebar, image_url="tcitrogg-logo-purple.svg", image_width=25, markdown=f"[Made by **{ARCHITECT}**]({BIO_URL})", columns=[2.5, 25])
+# image_side_text(sidebar, image_url="tcitrogg-logo-purple.svg", image_width=25, markdown=f"[Made by **{ARCHITECT}**]({BIO_URL})", columns=[2.5, 25])
