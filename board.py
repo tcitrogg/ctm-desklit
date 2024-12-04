@@ -112,7 +112,7 @@ with st.container(border=True):
 
 st.markdown("#")
 
-image_side_text(st)
+image_side_text(st, columns=[2.5, 37], markdown="<h1 style=\"margin-top: -1.3rem;\">DPMaker</h1>")
 st.markdown("####")
 image_side_text(st, image_url="tcitrogg-logo-purple.svg", image_width=25, markdown=f"[yours **{ARCHITECT}**]({BIO_URL})", columns=[2.5, 65])
 
