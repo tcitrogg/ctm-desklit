@@ -62,7 +62,7 @@ with st.container(border=True):
         duplicated_base_image = base_img.resize(aspect_ratio(1000, base_img.width, base_img.height))
 
         crop_box = (0, 0, 2000, 2000)
-        base_img = base_img.crop(crop_box)
+        base_img = base_img.resize((2000, 2000))
         base_img = base_img.filter(ImageFilter.GaussianBlur(5))
 
         # Resize design if necessary
