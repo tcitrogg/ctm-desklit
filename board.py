@@ -1,15 +1,17 @@
 import streamlit as st
 from PIL import Image, ImageFont, ImageDraw, ImageFilter
+from random import choice
 
 ARCHITECT = "Tcitrogg"
 BIO_URL   = "https://bnierimi.vercel.app"
+APPNAME   = "MakeDP"
 
 # Set the page title
-st.set_page_config(page_title="Joint Christmas Carol | DPMaker", page_icon=Image.open("dpmaker.png"))
+st.set_page_config(page_title=f"Joint Christmas Carol | {APPNAME}", page_icon=Image.open("dpmaker.png"))
 
 
 
-def image_side_text(ist_holder, image_url="dpmaker.png", image_width=44, markdown="<h1 style=\"margin-top: -0.5rem;\">DPMaker</h1>", columns=[4, 20]):
+def image_side_text(ist_holder, image_url="dpmaker.png", image_width=44, markdown=f"<h1 style=\"margin-top: -0.5rem;\">{APPNAME}</h1>", columns=[4, 20]):
     ist_var = ist_holder.container()
     col1, col2 = ist_holder.columns(columns)
     with ist_var:
@@ -44,6 +46,18 @@ with st.container(border=True):
 
 if user_name:
     st.subheader(f"Welcome **{user_name}**!")
+
+    listof_captions = [
+        f"""✨🤩 Come with *{user_name}* to the *Joint Christmas Carol 24*
+Invite families and friends, make""",
+        f"""✨🤩 *{user_name}* is inviting you to the *Joint Christmas Carol 24*
+Come with families and friends and invite them with""",
+        f"""✨😍 Join *{user_name}* at the *Joint Christmas Carol 24*
+Spread the cheer to families and friends with""",
+        f"""✨💃 Get Excited!!! *{user_name}* will be attending *Joint Christmas Carol 24*
+and is inviting you, share with loved ones and invite them with 🎉🕺
+generate""",
+    ]
 
 with st.container(border=True):
 
@@ -105,14 +119,24 @@ with st.container(border=True):
         st.image(combined_image, caption="Combined Image", use_column_width=True)
 
         # Option to save the combined image
-        save_button = st.button("Save Combined Image")
+        save_button = st.button("Download Image")
+        filename = "jcc24makedp-{user_name}.png"
         if save_button:
-            combined_image.save("combined_image.png")
-            st.success("Image saved as combined_image.png")
+            combined_image.save(filename)
+            st.success(f"Image saved as {filename}")
+
+        st.write("**A Personalised Caption** you can attach with your flyer")
+        st.code(body=f"""{choice(listof_captions)} your own personalised flyer: *https://jcc24makedp.streamlit.app/*
+- Date: **8th December 2024**
+- Time: **5PM**
+- Venue: **University Of Ilorin, PS Auditorium**
+                
+😇🤍 {choice(["Tell a friend to bring a friend!!!", "Bring your loved ones and spread the cheer! 🤩 Tell a friend to bring a friend!"])} 😉 {choice(["See you there", "Be there", "Don't Miss it", "Don't miss out"])}!!!
+#stacc #cotl #jcc24 #christmas""", language="markdown", wrap_lines=True)
 
 st.markdown("#")
 
-image_side_text(st, columns=[2.5, 37], markdown="<h1 style=\"margin-top: -1.3rem;\">DPMaker</h1>")
+image_side_text(st, columns=[2.5, 37], markdown=f"<h1 style=\"margin-top: -1.3rem;\">{APPNAME}</h1>")
 st.markdown("####")
 image_side_text(st, image_url="tcitrogg-logo-purple.svg", image_width=25, markdown=f"Made by <br>[yours **{ARCHITECT}**]({BIO_URL})", columns=[2.5, 65])
 
