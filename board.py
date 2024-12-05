@@ -58,6 +58,7 @@ with st.container(border=True):
     user_name = st.text_input("Enter your name:", placeholder="Your Name")
 
     st.button("Generate")
+    print(user_name)
 
 if user_name:
     st.subheader(f"Welcome **{user_name}**!")
