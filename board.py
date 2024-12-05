@@ -70,6 +70,8 @@ Spread the cheer to families and friends with""",
         f"""✨💃 Get Excited!!! *{user_name}* will be attending *Joint Christmas Carol 24*
 and is inviting you, share with loved ones and invite them with 🎉🕺
 generate""",
+        f"""✨😌 *{user_name}* will be at the *Joint Christmas Carol 24*
+What about you? 😏 share""",
     ]
 
 with st.container(border=True):
