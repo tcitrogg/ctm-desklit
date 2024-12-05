@@ -57,6 +57,8 @@ with st.container(border=True):
 
     user_name = st.text_input("Enter your name:", placeholder="Your Name")
 
+    st.button("Generate")
+
 if user_name:
     st.subheader(f"Welcome **{user_name}**!")
 
@@ -103,7 +105,7 @@ with st.container(border=True):
 
         # Choose placement coordinates
         x_offset = st.slider("Horizontal Image Position", 0, 2000, 208)
-        y_offset = st.slider("Vertical Image Position", -400, 2000, 307)
+        y_offset = st.slider("Vertical Image Position", -400, 2000, 525)
 
         # Create a copy of the base image to overlay on
         combined_image = base_img.copy()
@@ -111,7 +113,7 @@ with st.container(border=True):
         combined_image.paste(design_img, (0, 0), design_img)
 
         # Optional: Get position input for the text
-        text_position_x = st.slider("Horizontal Text Position", -400, combined_image.width, 1384)
+        text_position_x = st.slider("Horizontal Text Position", -400, combined_image.width, 1350)
         # text_position_x = st.slider("Text X Position", -400, combined_image.width, int(combined_image.width / 2))
         text_position_y = st.slider("Vertical Text Position", -400, combined_image.height, 730)
         # text_position_y = st.slider("Text Y Position", -400, combined_image.height, int(combined_image.height / 2))
