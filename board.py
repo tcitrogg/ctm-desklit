@@ -1,13 +1,19 @@
 import streamlit as st
+import os
 from PIL import Image, ImageFont, ImageDraw, ImageFilter
 from random import choice
+from io import BytesIO
+buf = BytesIO()
 
 ARCHITECT = "Tcitrogg"
 BIO_URL   = "https://bnierimi.vercel.app"
 APPNAME   = "MakeDP"
 
 # Set the page title
-st.set_page_config(page_title=f"Joint Christmas Carol | {APPNAME}", page_icon=Image.open("dpmaker.png"))
+st.set_page_config(page_title=f"Joint Christmas Carol | {APPNAME}", page_icon=Image.open("dpmaker.png"), menu_items={
+# 'About': "# This is a header. This is an *extremely* cool app!"
+'Get help': 'mailto:tcitrogg@gmail.com',
+})
 
 
 
@@ -19,6 +25,13 @@ def image_side_text(ist_holder, image_url="dpmaker.png", image_width=44, markdow
             st.image(image_url, width=image_width)
         with col2:
             st.markdown(markdown, unsafe_allow_html=True)
+
+# def get_image_download_link(img,filename,text):
+#     buffered = BytesIO
+#     img.save(buffered, format="JPEG")
+#     img_str = base64.b64encode(buffered.getvalue()).decode()
+#     href =  f'<a href="data:file/txt;base64,{img_str}" download="{filename}">{text}</a>'
+#     return href
 
 # Title
 
@@ -119,12 +132,14 @@ with st.container(border=True):
         st.image(combined_image, caption="Combined Image", use_column_width=True)
 
         # Option to save the combined image
-        save_button = st.button("Download Image")
-        filename = "jcc24makedp-{user_name}.png"
+        dp_filename = f"jcc24makedp-{user_name}.jpg"
+        # combined_image.save(dp_filename)
+        buffered = BytesIO()
+        combined_image.save(buffered, format="JPEG")
+        save_button = st.download_button("Download Image", data=buffered.getvalue(), file_name=dp_filename, mime="image/jpeg")
         if save_button:
-            combined_image.save(filename)
-            st.success(f"Image saved as {filename}")
-
+            st.success(f"Image saved as {dp_filename}")
+            # os.remove(dp_filename)
         st.write("**A Personalised Caption** you can attach with your flyer")
         st.code(body=f"""{choice(listof_captions)} your own personalised flyer: *https://jcc24makedp.streamlit.app/*
 - Date: **8th December 2024**
