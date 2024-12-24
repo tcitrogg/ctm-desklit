@@ -2,6 +2,7 @@ import streamlit as st
 import os
 import pandas as pd
 from streamlit_gsheets import GSheetsConnection
+from datetime import datetime
 
 # 
 st.title("Management")
@@ -14,6 +15,7 @@ existing_data = LAKE_CONN.read(worksheet="responses_one", ttl=5)
 # existing_data = existing_data.dropna(how="all")
 
 st.dataframe(existing_data)
+st.write(existing_data["Name"].str.contains("Radiance").any())
 
 # list of units
 UNIT_TYPES = [
@@ -29,13 +31,13 @@ UNIT_TYPES = [
 
 # data form
 with st.form(key="bio_form"):
-    name = st.text_input("Name*")
+    name = st.text_input("Name*").title()
     phone_number = st.text_input("Phone number")
     email = st.text_input("Email")
     gender = st.radio("Gender", ["Male", "Female"])
     date_of_birth = st.date_input("Date of Birth")
-    department = st.text_input("Department")
-    is_student = st.radio("Are you a:", ["Student", "Non-student"])
+    department = st.text_input("Department").title()
+    is_student = st.radio("Is a Student", [True, False])
     address = st.text_input("Address")
     units = st.multiselect("Unit", UNIT_TYPES)
 
@@ -47,12 +49,12 @@ with st.form(key="bio_form"):
         if not name:
             st.warning("Required field must be filled.")
             st.stop()
-        elif existing_data["Name"].str.contains(name).any() and existing_data["Date of Birth"].str.contains(date_of_birth).any():
+        elif existing_data["Name"].str.contains(name).any() and existing_data["Date of Birth"].str.contains(str(date_of_birth)).any():
             st.warning("Person already exists.")
             st.stop()
         else:
             # Create a new row of data
-            newbio_data = pd.Dataframe([
+            newbio_data = pd.DataFrame([
                 {
                     "Name": name,
                     "Phone number": phone_number,
@@ -60,9 +62,10 @@ with st.form(key="bio_form"):
                     "Gender": gender,
                     "Date of Birth": date_of_birth.strftime("%d-%m"),
                     "Department": department,
-                    "Are you a:": is_student,
+                    "Is a Student": is_student,
                     "Address": address,
                     "Unit": units,
+                    "Timestamp": datetime.now().timestamp()
                 }
             ])
 
@@ -73,3 +76,12 @@ with st.form(key="bio_form"):
             LAKE_CONN.update(worksheet="responses_one", data=updated_df)
             
             st.success("Saved data")
+            name = ""
+            phone_number = ""
+            email = ""
+            gender = ""
+            date_of_birth = ""
+            department = ""
+            is_student = ""
+            address = ""
+            units = ""
