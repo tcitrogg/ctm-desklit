@@ -1,36 +1,17 @@
 import streamlit as st
 import os
+import pandas as pd
 from streamlit_gsheets import GSheetsConnection
-from fx import append_csv, is_exist
+from datetime import datetime
 
-ARCHITECT = "Tcitrogg"
-BIO_URL   = "https://bnierimi.vercel.app"
-APPNAME   = "MakeDP"
+# 
+st.subheader("Management")
+st.title("Wedding Anniversary")
 
-LAKENAME  = ".wedann-biodata.csv"
+# Connect with Lake
+LAKE_CONN = st.connection("gsheets", type=GSheetsConnection)
 
+# Fetch data
+existing_data = LAKE_CONN.read(worksheet="WeddingAnniversary", ttl=5)
 
-st.write(f"""Wedding Anniversary""")
-
-row_data = []
-
-with st.container(border=True):
-    name = st.text_input("Name")
-    anniversary_date = st.date_input("Date")
-    row_data = [name, anniversary_date.strftime("%d-%m")]
-
-save_button = st.button("Save data")
-
-if save_button:
-    data_exist = is_exist(row_data=row_data, lakename=LAKENAME)
-    if not data_exist:
-        append_csv(row=row_data, lakename=LAKENAME)
-        row_data = []
-        with st.container(border=True):
-        #     st.write(f"""- {name}
-        # - {anniversary_date}
-        # """)
-            st.success(f"Saved")
-    else:
-        st.warning("Data Exists in Lake")
-
+st.dataframe(existing_data)

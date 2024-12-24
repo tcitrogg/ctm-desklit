@@ -4,6 +4,8 @@ import pandas as pd
 from streamlit_gsheets import GSheetsConnection
 from datetime import datetime
 
+st.set_page_config("CTM Desk - Lit")
+
 # 
 st.title("Management")
 

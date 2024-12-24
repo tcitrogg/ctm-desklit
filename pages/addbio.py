@@ -5,7 +5,8 @@ from streamlit_gsheets import GSheetsConnection
 from datetime import datetime
 
 # 
-st.title("Management")
+st.subheader("Management")
+st.title("Bio Data")
 
 # Connect with Lake
 LAKE_CONN = st.connection("gsheets", type=GSheetsConnection)
