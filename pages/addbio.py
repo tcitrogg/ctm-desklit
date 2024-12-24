@@ -1,65 +1,83 @@
 import streamlit as st
 import os
+import pandas as pd
 from streamlit_gsheets import GSheetsConnection
-from fx import append_csv, is_exist
+from datetime import datetime
 
-ARCHITECT = "Tcitrogg"
-BIO_URL   = "https://bnierimi.vercel.app"
-APPNAME   = "Biovault"
+# 
+st.title("Management")
 
-LAKENAME  = ".general-biodata.csv"
+# Connect with Lake
+LAKE_CONN = st.connection("gsheets", type=GSheetsConnection)
 
-# DATA_SCHEMA = {
-#     "name": "",
-#     "date_of_birth": "",
-#     "gender": "",
-#     "department": "",
-#     "email": "",
-#     "phone_number": "",
-# }
+# Fetch data
+existing_data = LAKE_CONN.read(worksheet="BioData", ttl=5)
 
-st.set_page_config(page_title=APPNAME, menu_items={
-# 'About': "# This is a header. This is an *extremely* cool app!"
-'Get help': 'mailto:tcitrogg@gmail.com',
-})
+# list of units
+UNIT_TYPES = [
+    "Prayer & Evangelism",
+    "Children",
+    "Ushering",
+    "Choir",
+    "Media",
+    "Library",
+    "Technical",
+    "Drama"
+]
 
-# side bar
-# sidebar = st.sidebar
-# sidebar.page_link("addbio.py", label="Biodata", icon="🏠")
-# sidebar.page_link("pages/wedann.py", label="Wedding Annivesary", icon="1️⃣")
-# sidebar.page_link("pages/getdata.py", label="Fetch Data", icon="2️⃣")
-
-
-row_data = []
-
-# -------- Home
-# main board
-with st.container(border=True):
-    name = st.text_input("Name")
+# data form
+with st.form(key="bio_form"):
+    name = st.text_input("Name*").title()
     phone_number = st.text_input("Phone number")
     email = st.text_input("Email")
-    date_of_birth = st.date_input("Date of Birth")
     gender = st.radio("Gender", ["Male", "Female"])
-    department = st.text_input("Department")
-    is_student = st.radio("Are you a:", ["Student", "Non-student"])
+    date_of_birth = st.date_input("Date of Birth")
+    department = st.text_input("Department").title()
+    is_student = st.radio("Is a Student", [True, False])
     address = st.text_input("Address")
-    row_data = [name, phone_number, email, date_of_birth.strftime("%d-%m"), gender, department, is_student, address]
+    units = st.multiselect("Unit", UNIT_TYPES)
 
-save_button = st.button("Save data")
+    st.write("***: Required fields**")
 
-if save_button:
-    data_exist = is_exist(row_data=row_data, lakename=LAKENAME)
-    if not data_exist:
-        append_csv(row=row_data, lakename=LAKENAME)
-        row_data = []
-        with st.container(border=True):
-        #     st.write(f"""- {name}
-        # - {date_of_birth}
-        # - {gender}
-        # - {department}
-        # - {phone_number}
-        # """)
-            st.success(f"Saved")
-    else:
-        st.warning("Data Exists in Lake")
+    submit_button = st.form_submit_button(label="Save")
 
+    if submit_button:
+        if not name:
+            st.warning("Required field must be filled.")
+            st.stop()
+        elif existing_data["Name"].str.contains(name).any() and existing_data["Date of Birth"].str.contains(str(date_of_birth)).any():
+            st.warning("Person already exists.")
+            st.stop()
+        else:
+            # Create a new row of data
+            newbio_data = pd.DataFrame([
+                {
+                    "Name": name,
+                    "Phone number": phone_number,
+                    "Email": email,
+                    "Gender": gender,
+                    "Date of Birth": date_of_birth.strftime("%d-%m"),
+                    "Department": department,
+                    "Is a Student": is_student,
+                    "Address": address,
+                    "Unit": units,
+                    "Timestamp": datetime.now().timestamp()
+                }
+            ])
+
+            # Add new data to existing dat
+            updated_df = pd.concat([existing_data, newbio_data], ignore_index=True)
+
+            # Update SheetLake with new data
+            LAKE_CONN.update(worksheet="BioData", data=updated_df)
+            
+            st.success("Saved data")
+            name = ""
+            phone_number = ""
+            email = ""
+            gender = ""
+            date_of_birth = ""
+            department = ""
+            is_student = ""
+            address = ""
+            units = ""
