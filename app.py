@@ -10,4 +10,5 @@ st.set_page_config("CTM Desk - Lit")
 st.title("Management")
 
 st.page_link("pages/addbio.py", label="Add Bio Data")
-st.page_link("pages/getdata.py", label="View Data Table")
+st.page_link("pages/wedann.py", label="Add Wedding Anniversary")
+# st.page_link("pages/getdata.py", label="View Data Table")
